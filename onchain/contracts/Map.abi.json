@@ -1,0 +1,45 @@
+{
+	"ABI version": 2,
+	"version": "2.2",
+	"header": ["time", "expire"],
+	"functions": [
+		{
+			"name": "constructor",
+			"inputs": [
+				{"name":"codeLand_","type":"cell"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "landAddress",
+			"inputs": [
+				{"name":"x_","type":"uint256"},
+				{"name":"y_","type":"uint256"}
+			],
+			"outputs": [
+				{"name":"value0","type":"address"}
+			]
+		},
+		{
+			"name": "mintLand",
+			"inputs": [
+				{"name":"x_","type":"uint256"},
+				{"name":"y_","type":"uint256"}
+			],
+			"outputs": [
+				{"name":"value0","type":"address"}
+			]
+		}
+	],
+	"data": [
+	],
+	"events": [
+	],
+	"fields": [
+		{"name":"_pubkey","type":"uint256"},
+		{"name":"_timestamp","type":"uint64"},
+		{"name":"_constructorFlag","type":"bool"},
+		{"name":"codeLand","type":"cell"}
+	]
+}
