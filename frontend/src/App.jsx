@@ -4,6 +4,13 @@ import {
 } from 'react-router-dom';
 import 'react-bootstrap-range-slider/dist/react-bootstrap-range-slider.css';
 import RangeSlider from 'react-bootstrap-range-slider';
+import {
+  connectWallet,
+  createMap,
+  mintLand,
+  getLandAddress,
+  getLandOwner,
+} from './Functions/api';
 
 import Home from './Containers/Home.jsx';
 import Control from './Containers/Control.jsx';
@@ -59,12 +66,30 @@ const App = () => {
   const location = useLocation();
 
   const [popup, setPopup] = useState({ current: null, item: null });
-  const [ value, setValue ] = useState(0); 
+  const [value, setValue] = useState(0); 
+  const [address, setAddress] = useState(null); 
 
   useEffect(() => {
     // api('products.get', { count: 9 }, onPopup).then((e) => {
     //   setTopProducts(e.products);
     // });
+    // connectWallet().then((address) => {
+    //   createMap().then((e) => {
+    //     mintLand(1, address, e).then((e) => {
+    //       console.log(e)
+    //     });
+    //   });
+    // })
+    connectWallet().then((address) => {
+      createMap().then((e) => {
+        getLandAddress(1, e).then((e) => {
+          console.log(e)
+          getLandOwner(e, address['_address']).then((e) => {
+            console.log(e)
+          });
+        });
+      });
+    })
   }, []);
 
   const onPopup = (current = null, item = null) => {
@@ -73,6 +98,7 @@ const App = () => {
 
   return (
     <ErrorBoundary>
+      <div className="mobile_block">Best use from desktop version</div>
       {(popup.current === 'buy' || popup.current === 'sell') && (
         <div className="popup">
           <div
@@ -157,7 +183,7 @@ const App = () => {
       )}
       <div className="sidebar">
         <div className="sidebar_block">
-          <img src="./img/logo.png" />
+          <img src="./img/logo.png" alt="" />
           <div className="title">Nymphaea</div>
         </div>
         <div className="sidebar_block sidebar_block_menu">
@@ -183,8 +209,19 @@ const App = () => {
           </Link>
         </div>
         <div className="sidebar_block sidebar_block_bottom">
-          <img src="./img/ever.png" />
-          <div className="subtitle">Connect with EVER</div>
+          <img src="./img/ever.png" alt="" />
+          {!address ? (
+            <div
+              className="btn"
+              onClick={() => {
+                connectWallet().then((address) => {
+                  setAddress(address);
+                })
+              }}
+            >Connect with EVER</div>
+          ) : (
+            <div className="subtitle">EVER wallet connected</div>
+          )}
         </div>
       </div>
       <div className={location.pathname === '/map' ? "content map" : "content"}>
@@ -197,7 +234,7 @@ const App = () => {
             <FontAwesomeIcon icon={['fas', 'bell']} />
           </div>
           <div className="header_block header_block_user">
-            <img src="./img/user.png" />
+            <img src="./img/user.png" alt="" />
             Olga
             <FontAwesomeIcon icon={['fas', 'angle-down']} />
           </div>
