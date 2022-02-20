@@ -11,7 +11,11 @@ import {
   getLandAddress,
   getLandOwner,
   claimResources,
+  getLandData,
 } from './Functions/api';
+import {
+  formatAddColors,
+} from './Functions/handle';
 
 import Home from './Containers/Home.jsx';
 import Control from './Containers/Control.jsx';
@@ -237,11 +241,14 @@ const App = () => {
         getLandOwner(landAddress).then((landOwner) => {
           landsTemp[i].owner = landOwner;
           if (landOwner === myAddress) {
-            setMyLands([...myLands, {
-              ...landsTemp[i],
-              address: landAddress,
-              owner: landOwner,
-            }]);
+            getLandData(landAddress, myAddress).then((landData) => {
+              setMyLands([...myLands, {
+                ...landsTemp[i],
+                ...formatAddColors(landData),
+                address: landAddress,
+                owner: landOwner,
+              }]);
+            });
           }
           setTimeout(() => {
             setIsSync(false);
@@ -262,9 +269,9 @@ const App = () => {
     });
 	};
 
-  const onClaim = (landId) => {
+  const onClaim = (landAddress) => {
     onPopup('loading');
-		claimResources(landId, address).then((e) => {
+		claimResources(landAddress, address).then((e) => {
       console.log(e);
       const hash = e.inMessage.hash;
       onPopup('success', hash);
@@ -287,7 +294,7 @@ const App = () => {
           />
           <div className="popup_content">
             <div className={`stat_popup_block ${popup.item.className}`} />
-            <div className="popup_title">{`${popup.current === 'buy' ? 'Buy' : 'Sell'} ${popup.item.name}`}</div>
+            <div className="popup_title">{`${popup.current === 'buy' ? 'Buy' : 'Sell'} ${popup.item.label}`}</div>
             <input
               type="text"
               value={value}
@@ -344,8 +351,8 @@ const App = () => {
           />
           <div className="popup_content">
             <div className="popup_title">Успешно</div>
-            {popup.item && popup.item.hash && (
-              <div className="popup_subtitle popup_wrap">{popup.item.hash}</div>
+            {popup.item && (
+              <div className="popup_subtitle popup_wrap">{popup.item}</div>
             )}
             <div className="popup_icon">
               <FontAwesomeIcon icon={['far', 'circle-check']} />
@@ -369,7 +376,7 @@ const App = () => {
                     <div className="popup_title popup_wrap">{popup.item.address}</div>
                     <div
                       className="btn"
-                      style={{ background: '#45EBAF', marginTop: 20 }}
+                      style={{ background: '#168C4D', marginTop: 20 }}
                       onClick={onPopup}
                     >Good</div>
                   </>
@@ -490,7 +497,7 @@ const App = () => {
                 <div
                   className="btn"
                   style={{ background: '#5d745c' }}
-                  onClick={() => onClaim(myLands[0].id)}
+                  onClick={() => onClaim(myLands[0].address)}
                 >Claim</div>
               </div>
             </>
