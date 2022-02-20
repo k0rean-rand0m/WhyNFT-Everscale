@@ -74,8 +74,8 @@ export async function getLandOwner(landId) {
     }
 }
 
-export async function claimResources(landId, myAddress) {
-    const land = new ever.Contract(landABI, landId);
+export async function claimResources(landAddress, myAddress) {
+    const land = new ever.Contract(landABI, landAddress);
     const transaction = await land.methods.claim({}).send({
         from: myAddress,
         amount: '1000000000',

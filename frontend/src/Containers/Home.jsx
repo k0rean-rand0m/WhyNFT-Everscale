@@ -3,6 +3,7 @@ import {
 	Link,
 } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { formatName } from '../Functions/handle';
 
 const Home = ({ onPopup, myLands, address, onConnect }) => {
   return (
@@ -18,18 +19,13 @@ const Home = ({ onPopup, myLands, address, onConnect }) => {
           <div className="stat_block">
             <div className="title title_group">
               <span>Population</span>
-              <span>33 people | 346 сoins</span>
+              <span>{`${myLands[0].population.length} entity`}</span>
             </div>
             <div className="stat_block_content">
-              {[
-                { name: 'Locals', count: 12, className: 'stat_block_item_title_yellow' },
-                { name: 'Colonizers', count: 12, className: 'stat_block_item_title_green' },
-                { name: 'Smugglers', count: 12, className: 'stat_block_item_title_blue' },
-                { name: 'Seers', count: 12, className: 'stat_block_item_title_red' },
-              ].map((item) => (
+              {myLands[0].population.map((item) => (
                 <div className="stat_block_item" key={item.name}>
                   <div className={`stat_block_item_title ${item.className}`}>
-                    <span>{item.name}</span>
+                    <span>{item.label}</span>
                     <span>{item.count}</span>
                   </div>
                   <div
@@ -49,19 +45,15 @@ const Home = ({ onPopup, myLands, address, onConnect }) => {
           <div className="stat_block">
             <div className="title title_group">
               <span>Fossils</span>
-              <span>33 cubic meter | 346 сoins</span>
+              <span>{`+ ${myLands[0].fossils.reduce((total, value) => total + Number(value.production), 0)} per sec`}</span>
             </div>
             <div className="stat_block_content">
-              {[
-                { name: 'Uranus', count: 12, className: 'stat_block_item_title_brown' },
-                { name: 'Metal', count: 12, className: 'stat_block_item_title_metal' },
-                { name: 'Hydrogen', count: 12, className: 'stat_block_item_title_lightgreen' },
-                { name: 'Oxygen', count: 12, className: 'stat_block_item_title_purple' },
-              ].map((item) => (
+              {console.log(myLands)}
+              {myLands[0].fossils.map((item) => (
                 <div className="stat_block_item" key={item.name}>
                   <div className={`stat_block_item_title ${item.className}`}>
-                    <span>{item.name}</span>
-                    <span>{item.count}</span>
+                    <span>{formatName(item.label)}</span>
+                    <span>{item.tank / 1000000}</span>
                   </div>
                   <div
                     className="btn"
@@ -80,16 +72,13 @@ const Home = ({ onPopup, myLands, address, onConnect }) => {
           <div className="stat_block">
             <div className="title title_group">
               <span>Plants</span>
-              <span>33 plants| 346 сoins</span>
+              <span>{`${myLands[0].plants.length} entity`}</span>
             </div>
             <div className="stat_block_content">
-              {[
-                { name: 'Predatory plants', count: 12, className: 'stat_block_item_title_orange' },
-                { name: 'Earth plants', count: 12, className: 'stat_block_item_title_doublegreen' },
-              ].map((item) => (
+              {myLands[0].plants.map((item) => (
                 <div className="stat_block_item" key={item.name}>
                   <div className={`stat_block_item_title ${item.className}`}>
-                    <span>{item.name}</span>
+                    <span>{item.label}</span>
                     <span>{item.count}</span>
                   </div>
                   <div
@@ -109,17 +98,13 @@ const Home = ({ onPopup, myLands, address, onConnect }) => {
           <div className="stat_block">
             <div className="title title_group">
               <span>Technique</span>
-              <span>33 techniques | 346 сoins</span>
+              <span>{`${myLands[0].technique.length} entity`}</span>
             </div>
             <div className="stat_block_content">
-              {[
-                { name: 'Military vehicle', count: 12, className: 'stat_block_item_title_brown2' },
-                { name: 'Mining machine', count: 12, className: 'stat_block_item_title_brown3' },
-                { name: 'Industrial building', count: 12, className: 'stat_block_item_title_green2' },
-              ].map((item) => (
+              {myLands[0].technique.map((item) => (
                 <div className="stat_block_item" key={item.name}>
                   <div className={`stat_block_item_title ${item.className}`}>
-                    <span>{item.name}</span>
+                    <span>{item.label}</span>
                     <span>{item.count}</span>
                   </div>
                   <div
