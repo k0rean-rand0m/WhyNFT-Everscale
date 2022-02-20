@@ -5,14 +5,14 @@ import './Land.sol';
 
 contract Map {
 
-    TvmCell codeLand;
+    TvmCell _code_land;
     uint128 constant value = 0.1 ton;
 
-    constructor(TvmCell codeLand_) public {
+    constructor(TvmCell code_land) public {
         require(tvm.pubkey() != 0, 101);
         require(msg.pubkey() == tvm.pubkey(), 102);
         tvm.accept();
-        codeLand = codeLand_;
+        _code_land = code_land;
     }
 
     // Защита от похищения адреса
@@ -22,22 +22,22 @@ contract Map {
     // everdev contract topup ./Map.abi.json -v 1000000000 -s Map - topup account
     // everdev contract deploy ./Map.abi.json -s Map - deploy account
 
-    function landAddress(uint x_, uint y_) public view returns (address) {
+    function landAddress(uint land_id) public view returns (address) {
         TvmCell stateInit = tvm.buildStateInit({
-            code: codeLand,
+            code: _code_land,
             contr: Land,
-            varInit: { x: x_ , y: y_ },
+            varInit: { id: land_id },
             pubkey: 0
         });
         return address(tvm.hash(stateInit));
     }
 
-    function mintLand(uint x_, uint y_) public returns (address) {
+    function mintLand(uint land_id) public returns (address) {
         tvm.rawReserve(1 ton, 0);
         TvmCell stateInit = tvm.buildStateInit({
-            code: codeLand,
+            code: _code_land,
             contr: Land,
-            varInit: { x: x_, y: y_ },
+            varInit: { id: land_id },
             pubkey: 0
         });
 

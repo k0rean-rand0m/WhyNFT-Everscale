@@ -3,9 +3,8 @@ pragma AbiHeader expire;
 
 contract Land {
     address public owner;
-    uint static public x;
-    uint static public y;
-    string public metadata;
+    uint static public id;
+    string public base_url;
 
     modifier checkOwnerAndAccept {
         // Check that message was signed with contracts key.
@@ -17,5 +16,11 @@ contract Land {
     constructor(address owner_) public {
         tvm.accept();
         owner = owner_;
+    }
+
+    function metadata() public pure returns (string) {
+        string a = "A";
+        string b = "B";
+        return a + b;
     }
 }

@@ -1,8 +1,8 @@
 signer=$(npx everdev signer list | grep Default | cut -d' ' -f1)
-codeLand="$(npx tonos-cli decode stateinit --tvc ./Land.tvc | tail -n +5 | jq -r .code)"
+code_land="$(npx tonos-cli decode stateinit --tvc ./Land.tvc | tail -n +5 | jq -r .code)"
 ownerPubkey="$(npx everdev signer info "${signer}" | jq -r .keys.public)"
-input="codeLand_:'${codeLand}'"
-npx everdev contract deploy ./Map.abi.json -s Map2 --value 1000000000 --input "${input}"
+input="code_land:'${code_land}'"
+npx everdev contract deploy ./Map.abi.json -s Map3 --value 1000000000 --input "${input}"
 
 #npx everdev contract run-local src/compiled/NftRoot getTotalMinted
 #signer=$(npx everdev signer list | grep Default | cut -d' ' -f1)

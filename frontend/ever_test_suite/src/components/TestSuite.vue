@@ -8,13 +8,14 @@
     <div style="text-align: center; width: 100%">Map on: {{mapAddress}}</div>
     <div style="text-align: center; width: 100%">Land on: {{landAddress}}</div>
     <div style="text-align: center; width: 100%">Land owner: {{landOwner}}</div>
+    <div style="text-align: center; width: 100%">Metadata: {{landMeta}}</div>
     <div>
       <br>
-      <input placeholder="x" v-model="landX"><br><br>
-      <input placeholder="y" v-model="landY"><br><br>
+      <input placeholder="land id" v-model="landId"><br><br>
       <button @click="mintLand">Mint</button>
       <button @click="getLandAddress">Get Address</button>
       <button @click="getLandOwner">Get Owner</button>
+      <button @click="getLandMeta">Get Meta</button>
     </div>
   </div>
 </template>
@@ -39,13 +40,13 @@ export default {
       ever: null,
       address: null,
 
-      mapAddress: "0:2c796f08455f6514de76ffccbc08987c1bccb7ba0f807710269d52c76af0fc28",
+      mapAddress: "0:ea0e6ea28ed3c44d1f5d824f9aefe1afec3a0ed7357a686dd892af5d13f46dcd",
       map: null,
 
+      landId: null,
       landAddress: "",
       landOwner: "",
-      landX: 0,
-      landY: 0,
+      landMeta: ""
     }
   },
 
@@ -76,9 +77,9 @@ export default {
     },
 
     async mintLand() {
+      let landId = parseInt(this.landId)
       const transaction = await this.map.methods.mintLand({
-            x_: 0,
-            y_: 0
+            land_id: landId
           }).send({
             from: this.address,
             amount: '1000000000',
@@ -88,15 +89,24 @@ export default {
     },
 
     async getLandAddress() {
-      let x = parseInt(this.landX)
-      let y = parseInt(this.landY)
-      console.log(x, y)
+      let landId = parseInt(this.landId)
       try {
         const output = await this.map.methods.landAddress({
-            x_: x,
-            y_: y
+            land_id: landId
           }).call();
         this.landAddress = output['value0'].toString();
+      } catch (e) {
+        console.error(e);
+      }
+    },
+
+    async getLandMeta() {
+      let landId = parseInt(this.landId)
+      try {
+        const output = await this.map.methods['metadata']({
+          land_id: landId
+        }).call();
+        this.landMeta = output;
       } catch (e) {
         console.error(e);
       }

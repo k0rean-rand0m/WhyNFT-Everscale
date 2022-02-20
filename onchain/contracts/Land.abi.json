@@ -12,6 +12,14 @@
 			]
 		},
 		{
+			"name": "metadata",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"value0","type":"string"}
+			]
+		},
+		{
 			"name": "owner",
 			"inputs": [
 			],
@@ -20,33 +28,24 @@
 			]
 		},
 		{
-			"name": "x",
+			"name": "id",
 			"inputs": [
 			],
 			"outputs": [
-				{"name":"x","type":"uint256"}
+				{"name":"id","type":"uint256"}
 			]
 		},
 		{
-			"name": "y",
+			"name": "base_url",
 			"inputs": [
 			],
 			"outputs": [
-				{"name":"y","type":"uint256"}
-			]
-		},
-		{
-			"name": "metadata",
-			"inputs": [
-			],
-			"outputs": [
-				{"name":"metadata","type":"string"}
+				{"name":"base_url","type":"string"}
 			]
 		}
 	],
 	"data": [
-		{"key":1,"name":"x","type":"uint256"},
-		{"key":2,"name":"y","type":"uint256"}
+		{"key":1,"name":"id","type":"uint256"}
 	],
 	"events": [
 	],
@@ -55,8 +54,7 @@
 		{"name":"_timestamp","type":"uint64"},
 		{"name":"_constructorFlag","type":"bool"},
 		{"name":"owner","type":"address"},
-		{"name":"x","type":"uint256"},
-		{"name":"y","type":"uint256"},
-		{"name":"metadata","type":"string"}
+		{"name":"id","type":"uint256"},
+		{"name":"base_url","type":"string"}
 	]
 }
