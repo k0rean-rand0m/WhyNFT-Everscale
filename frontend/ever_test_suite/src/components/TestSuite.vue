@@ -1,9 +1,20 @@
 <template>
   <div class="hello">
     <img
-        src="https://everkit.org/everscale-branding-v1.0.0/logo/svg/everscale_logo_secondary.svg"
-        style="height: 50px; display: inline;"
+        src="https://lh3.googleusercontent.com/fife/AAWUweXNXyajj1y-iCKyjSnXLaPkyGnBBTwmecEBfSWFHRc_n23-KR4CaGxZRzenVqJ2N953HOtQ6RvDLIQb_CX31c7uREQ7xFmZmZx8UD6sWYyAwa0j8lBWbA6QOx17xS1b94eoGNTyhDfihC5gSV6yx6cGfoR9yr3UyWt3Euq83CkCRJfIsxArHjdMk78f65-Tq7lkTCTRNt0fcarPBFuvQ6FROTSnlqaFAnhlLkSZiW83bXLzqkTk6AV64dqByBtehc4sj_5bNKRwHPvaQYpF9x1_TZUXRgyGIZL3gABVztnrZf1tTxTtxRRyoJ5RlMTwjc9d4ori700_YYOatr_w2IMo6sO4KrM9yJQvujX6tBHG94GY99l3c8vMHIsYqKBlIQTm_RgEql4owV6m0yRR7wSslOiOwyHRQ_1WboCZZGnKAFVWkWtb2JU33R-4I0J86RxFeJW3UZpwp2Tb5B3VjEvGyKo17pk0-Ri4RD9CkMBjOn3j81DqdUyN4YL9vzsh2RW9TJpM8nD0J5YWVjvu4Hmrgc7XNTrJF3nAB_S4YnaXwxT4snrhDT5igVZzEg09kktbLFqXQr_8syai4NGdzzL84tIYpQ0zWb0UYQMKcR2ugDzrASfdsKjrUTSpbTRbvZKC8yydzWZEBx1sHvmLle84RUCRg8aOFVoKEBrRY8zKgRHVBQ2euzw8RKROGqdF7rEY0BSRKO_NtF-w5IE4vDBpmmvGA7MFcA=w2880-h1642"
+        style="height: 100px; display: inline;"
     />
+    <h3>Mint & Get</h3><br/>
+    <p>Please run "Get Data" before any action</p>
+    <div>
+      <br>
+      <input placeholder="land id" v-model="landId"><br><br>
+      <button @click="mintLand">Mint</button>
+<!--      <button @click="getLandAddress">Get Address</button>-->
+      <button @click="getLandData">Get Data</button>
+      <button @click="claim">Claim</button>
+    </div>
+    <br>
     <div style="text-align: center; width: 100%">Connected: {{address}} |
       <a href="#" @click="switchAccount">Swith</a></div>
     <div style="text-align: center; width: 100%">Map on: {{mapAddress}}</div>
@@ -20,14 +31,15 @@
          v-bind:key="producer">
       {{landProducers[producer]}}
     </div>
-    <div>
-      <br>
-      <input placeholder="land id" v-model="landId"><br><br>
-      <button @click="mintLand">Mint</button>
-      <button @click="getLandAddress">Get Address</button>
-      <button @click="getLandData">Get Data</button>
-      <button @click="claim">Claim</button>
-    </div>
+
+    <hr/>
+
+    <h3>Transfer</h3>
+    <input placeholder="citizens, plants, mining_machines, ..." v-model="transferAssetType"><br>
+    <input placeholder="amount" v-model="transferAssetAmount"><br>
+    <input placeholder="Receiver Land ID" v-model="transferAssetReceiver"><br>
+    <button @click="assetTransfer">Transfer</button>
+
   </div>
 </template>
 
@@ -51,7 +63,7 @@ export default {
       ever: null,
       address: null,
 
-      mapAddress: "0:0c043085060712d5f84e3a3dd380d306e8077810a762a60cffbffcc4ea795642",
+      mapAddress: "0:583e6a53dab36804e0101ac58b2635caa2a8eaa8d84376b3197d7f67daad22af",
       map: null,
 
       land: null,
@@ -60,7 +72,12 @@ export default {
       landOwner: "",
       landLastClaim: null,
       landFossils: [],
-      landProducers: []
+      landProducers: [],
+
+      transferAssetType: null,
+      transferAssetAmount: null,
+      transferAssetReceiver: null,
+
     }
   },
 
@@ -90,6 +107,13 @@ export default {
       this.map = new this.ever.Contract(mapABI, this.mapAddress);
     },
 
+    async test() {
+      const output = await this.land.methods.addr({
+        sender_id: 1
+      }).call();
+      console.log(output['value0'].toString());
+    },
+
     async switchAccount() {
       await this.ever.changeAccount();
       const { accountInteraction } = await this.ever.requestPermissions({
@@ -107,22 +131,10 @@ export default {
             land_id: landId
           }).send({
             from: this.address,
-            amount: '1000000000',
+            amount: '10000000000',
             bounce: true,
           });
       console.log(transaction);
-    },
-
-    async getLandAddress() {
-      let landId = parseInt(this.landId)
-      try {
-        const output = await this.map.methods.landAddress({
-            land_id: landId
-          }).call();
-        this.landAddress = output['value0'].toString();
-      } catch (e) {
-        console.error(e);
-      }
     },
 
     async claim() {
@@ -134,7 +146,36 @@ export default {
       console.log(transaction);
     },
 
+    async assetTransfer() {
+      console.log(
+          typeof this.transferAssetType,
+          typeof parseInt(this.transferAssetAmount),
+          typeof parseInt(this.transferAssetReceiver));
+      const transaction = await this.land.methods.assetTransfer({
+        label: this.transferAssetType,
+        amount: parseInt(this.transferAssetAmount),
+        receiver_id: parseInt(this.transferAssetReceiver)
+      }).send({
+        from: this.address,
+        amount: '1000000000',
+        bounce: true,
+      });
+      console.log(transaction);
+    },
+
+
     async getLandData() {
+      let landId = parseInt(this.landId)
+      try {
+        const output = await this.map.methods.landAddress({
+          land_id: landId
+        }).call();
+        this.landAddress = output['value0'].toString();
+      } catch (e) {
+        console.error(e);
+        return;
+      }
+
       this.land = new this.ever.Contract(landABI, this.landAddress);
 
       try {
@@ -147,7 +188,10 @@ export default {
         }
       } catch (e) {
         if (e.code === 2) {
-          this.landOwner = "Land wasn't minted yet"
+          this.landOwner = "Land wasn't minted yet";
+          this.landLastClaim = null;
+          this.landFossils = [];
+          this.landProducers = [];
         } else {
           this.landOwner = "Unexpected error. Check console."
           console.error(e);

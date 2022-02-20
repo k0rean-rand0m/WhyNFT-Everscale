@@ -29,6 +29,26 @@
 			]
 		},
 		{
+			"name": "assetTransfer",
+			"inputs": [
+				{"name":"label","type":"string"},
+				{"name":"amount","type":"uint256"},
+				{"name":"receiver_id","type":"uint256"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "assetRecieve",
+			"inputs": [
+				{"name":"label","type":"string"},
+				{"name":"amount","type":"uint256"},
+				{"name":"sender_id","type":"uint256"}
+			],
+			"outputs": [
+			]
+		},
+		{
 			"name": "owner",
 			"inputs": [
 			],
@@ -65,7 +85,7 @@
 			"inputs": [
 			],
 			"outputs": [
-				{"name":"citizens","type":"uint64"}
+				{"name":"citizens","type":"uint256"}
 			]
 		},
 		{
@@ -73,7 +93,7 @@
 			"inputs": [
 			],
 			"outputs": [
-				{"name":"plants","type":"uint64"}
+				{"name":"plants","type":"uint256"}
 			]
 		},
 		{
@@ -81,7 +101,23 @@
 			"inputs": [
 			],
 			"outputs": [
-				{"name":"mining_machines","type":"uint64"}
+				{"name":"mining_machines","type":"uint256"}
+			]
+		},
+		{
+			"name": "war_machines",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"war_machines","type":"uint256"}
+			]
+		},
+		{
+			"name": "nymphaea",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"nymphaea","type":"uint256"}
 			]
 		},
 		{
@@ -130,9 +166,11 @@
 		{"name":"id","type":"uint256"},
 		{"name":"base_uri","type":"string"},
 		{"name":"last_claim","type":"uint64"},
-		{"name":"citizens","type":"uint64"},
-		{"name":"plants","type":"uint64"},
-		{"name":"mining_machines","type":"uint64"},
+		{"name":"citizens","type":"uint256"},
+		{"name":"plants","type":"uint256"},
+		{"name":"mining_machines","type":"uint256"},
+		{"name":"war_machines","type":"uint256"},
+		{"name":"nymphaea","type":"uint256"},
 		{"components":[{"name":"label","type":"string"},{"name":"production","type":"uint256"},{"name":"unclaimed_capacity","type":"uint256"},{"name":"tank","type":"uint256"}],"name":"uranus","type":"tuple"},
 		{"components":[{"name":"label","type":"string"},{"name":"production","type":"uint256"},{"name":"unclaimed_capacity","type":"uint256"},{"name":"tank","type":"uint256"}],"name":"metal","type":"tuple"},
 		{"components":[{"name":"label","type":"string"},{"name":"production","type":"uint256"},{"name":"unclaimed_capacity","type":"uint256"},{"name":"tank","type":"uint256"}],"name":"hydrogen","type":"tuple"},
