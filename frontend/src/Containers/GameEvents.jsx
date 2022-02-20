@@ -5,10 +5,10 @@ const GameEvents = ({ onPopup }) => {
   return (
     <div className="container">
       <div className="shadow_left">
-        <img src="./img/shadow.svg" />
+        <img src="./img/shadow.svg" alt="" />
       </div>
       <div className="shadow_right">
-        <img src="./img/shadow.svg" />
+        <img src="./img/shadow.svg" alt="" />
       </div>
       <div className="stat_block">
         <div className="title title_group">

@@ -93,6 +93,19 @@ input[type=submit] {
     appearance: none;
 }
 
+.mobile_block {
+    display: none;
+    background: #000000;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    position: absolute;
+    z-index: 10;
+    align-items: center;
+    justify-content: center;
+}
+
 .header {
     height: 40px;
     display: flex;
@@ -475,8 +488,8 @@ input[type=submit] {
     text-align: center;
 }
 
-@media (max-width: 1000px) {
-    .header_logo a span {
-        font-size: 20px;
+@media (max-width: 800px) {
+    .mobile_block {
+        display: flex;
     }
 }

@@ -1,57 +1,75 @@
-const server = 'https://whynft.ru/api/';
-let token = null;
+import {
+    ProviderRpcClient,
+} from 'everscale-inpage-provider';
+const mapABI = require("./Map.abi.json")
+const landABI = require("./Land.abi.json")
 
-async function serverRequest(json = {}, onPopup) {
-    return fetch(server, {
-            method: 'POST',
-            body: JSON.stringify(json),
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`,
-            },
-        })
-        .catch((error) => {
-            const errText = error.toString();
-            // Error: Network Error
-            // Error: Request failed with status code 400
-            // Error: Request failed with status code 429
-            let errCode;
-            if (errText === 'Error: Request failed with status code 429') {
-                errCode = 429;
-                onPopup('error', 'Слишком много запросов, попробуй позже');
-            } else if (errText === 'Error: Network Error') {
-                errCode = 'network';
-                onPopup('error', 'Нет доступа к интернету, попробуй позже');
-            } else {
-                errCode = 400;
-                onPopup('error', 'Что-то пошло не так, попробуй еще раз');
-            }
-            return {
-                error: errCode,
-                data: errText,
-            };
-        });
+const ever = new ProviderRpcClient();
+
+export async function connectWallet() {
+    if (!(await ever.hasProvider())) {
+        throw new Error('Extension is not installed');
+    }
+    await ever.ensureInitialized();
+    const {
+        accountInteraction
+    } = await ever.requestPermissions({
+        permissions: ['basic', 'accountInteraction'],
+    });
+    if (accountInteraction == null) {
+        throw new Error('Insufficient permissions');
+    }
+    return accountInteraction.address;
 }
 
-export default function api(method, params = {}, onPopup) {
-    return new Promise((resolve, reject) => {
-        const json = {
-            method,
-            params,
-        };
+export async function createMap() {
+    const map = new ever.Contract(mapABI, '0:17529774b77b8d951cfab8b8273eb9eb500b706afce3e18f897a8021b6c64dfb');
+    return map;
+}
 
-        serverRequest(json, onPopup).then(async (responce) => {
-            const res = await responce.json();
-            if (res.error !== 0) {
-                reject(res.data);
-            } else if (res.data === undefined) {
-                resolve({});
-            } else {
-                if (res.data.token) {
-                    token = res.data.token;
-                }
-                resolve(res.data);
-            }
-        });
+export async function mintLand(landId, address, map) {
+    console.log(address)
+    const transaction = await map.methods.mintLand({
+        land_id: landId
+    }).send({
+        from: address,
+        amount: '1000000000',
+        bounce: true,
     });
+    return transaction;
+}
+
+export async function getLandAddress(landId, map) {
+    try {
+        const output = await map.methods.landAddress({
+            land_id: landId
+        }).call();
+        const landAddress = output['value0'].toString();
+        return landAddress;
+    } catch (e) {
+        console.error(e);
+    }
+}
+
+export async function getLandOwner(landId, myAddress) {
+    const land = new ever.Contract(landABI, landId);
+    let landOwner = '';
+    try {
+        const output = await land.methods.owner({}).call();
+        let landOwner = output["owner"]["_address"]
+        if (landOwner === myAddress.toString()) {
+            landOwner = "You!";
+        } else {
+            landOwner = output["owner"]["_address"];
+        }
+        return landOwner;
+    } catch (e) {
+        if (e.code === 2) {
+            landOwner = "Land wasn't minted yet"
+        } else {
+            landOwner = "Unexpected error. Check console."
+            console.error(e);
+        }
+        return landOwner;
+    }
 }
