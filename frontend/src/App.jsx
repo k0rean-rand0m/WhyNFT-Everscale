@@ -274,16 +274,22 @@ const App = () => {
   const onClaim = (landAddress) => {
     onPopup('loading');
 		claimResources(landAddress, address).then((e) => {
-      const hash = e.inMessage.hash;
-      onPopup('success', hash);
+      setTimeout(() => {
+        onGetLands();
+        const hash = e.inMessage.hash;
+        onPopup('success', hash);
+      }, 1000);
     });
 	};
 
   const onTransfer = (item) => {
     onPopup('loading');
 		assetTransfer(myLands[0].address, address, item.label, value, lands[transferId].id).then((e) => {
-      const hash = e.inMessage.hash;
-      onPopup('success', hash);
+      setTimeout(() => {
+        onGetLands();
+        const hash = e.inMessage.hash;
+        onPopup('success', hash);
+      }, 1000);
     });
 	};
 
