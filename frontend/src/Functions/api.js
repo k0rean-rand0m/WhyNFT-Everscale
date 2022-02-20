@@ -5,6 +5,7 @@ const mapABI = require("./Map.abi.json")
 const landABI = require("./Land.abi.json")
 
 const ever = new ProviderRpcClient();
+const contractAddress = '0:583e6a53dab36804e0101ac58b2635caa2a8eaa8d84376b3197d7f67daad22af';
 
 export async function connectWallet() {
     if (!(await ever.hasProvider())) {
@@ -23,7 +24,7 @@ export async function connectWallet() {
 }
 
 export async function createMap() {
-    const map = new ever.Contract(mapABI, '0:0c043085060712d5f84e3a3dd380d306e8077810a762a60cffbffcc4ea795642');
+    const map = new ever.Contract(mapABI, contractAddress);
     return map;
 }
 
@@ -33,7 +34,7 @@ export async function mintLand(landId, address, map) {
         land_id: landId
     }).send({
         from: address,
-        amount: '1000000000',
+        amount: '10000000000',
         bounce: true,
     });
     return transaction;
@@ -78,7 +79,7 @@ export async function claimResources(landAddress, myAddress) {
     const land = new ever.Contract(landABI, landAddress);
     const transaction = await land.methods.claim({}).send({
         from: myAddress,
-        amount: '1000000000',
+        amount: '10000000000',
         bounce: true,
     });
     return transaction;
@@ -124,4 +125,17 @@ export async function getLandData(landAddress, myAddress) {
         lastClaim
     }
     return res;
+}
+export async function assetTransfer(landAddress, myAddress, transferAssetType, transferAssetAmount, transferAssetReceiver) {
+    const land = new ever.Contract(landABI, landAddress);
+    const transaction = await land.methods.assetTransfer({
+        label: transferAssetType,
+        amount: parseInt(transferAssetAmount),
+        receiver_id: parseInt(transferAssetReceiver)
+    }).send({
+        from: myAddress,
+        amount: '10000000000',
+        bounce: true,
+    });
+    return transaction;
 }
