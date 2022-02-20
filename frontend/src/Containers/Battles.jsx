@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Battles = ({ onPopup }) => {
+const Battles = ({ onPopup, myLands, lands }) => {
   return (
     <div className="container">
       <div className="shadow_left">
@@ -14,23 +14,26 @@ const Battles = ({ onPopup }) => {
           <span>Battles</span>
         </div>
         <div className="stat_block_content">
-          {[
-            { name: 'Bigrows', className: 'stat_block_item_title_green' },
-            { name: 'Flowberies', className: 'stat_block_item_title_red' },
-            { name: 'Lurkoban', className: 'stat_block_item_title_brown' },
-          ].map((item) => (
-            <div className="stat_block_item" key={item.name}>
+          {lands.map((item) => (item.address && myLands.some((land) => land.id !== item.id) && (
+            <div className="stat_block_item" key={item.address}>
               <div className={`stat_block_item_title ${item.className}`}>
-                <span>{item.name}</span>
-                <span>{item.count}</span>
+                <span>{item.address}</span>
               </div>
-              <div
-                className="btn"
-                style={{ background: '#E5750C' }}
-                onClick={() => onPopup('vote', item)}
-              >Vote</div>
+              {item.owner ? (
+                <div
+                  className="btn"
+                  style={{ background: '#b51515' }}
+                  onClick={() => onPopup('attack', item)}
+                >Attack</div>
+              ) : (
+                <div
+                  className="btn"
+                  style={{ background: '#168c4d' }}
+                  onClick={() => onPopup('attack', item)}
+                >Mint</div>
+              )}
             </div>
-          ))}
+          )))}
         </div>
       </div>
     </div>
