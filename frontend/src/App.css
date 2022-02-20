@@ -71,7 +71,7 @@ input[type="text"],
 }
 
 .select {
-    width: 300px;
+    width: calc(100% - 10px);
     margin: 0;
     border-radius: 30px;
     padding-left: 50px;
@@ -94,10 +94,17 @@ input[type="text"],
     box-sizing: border-box;
     width: 100%;
     margin: 5px;
+    cursor: pointer;
+}
+
+.header .select_block {
     width: 300px;
     left: 0;
     position: absolute;
-    cursor: pointer;
+}
+
+.header .select_block .select {
+    width: 300px;
 }
 
 form textarea {

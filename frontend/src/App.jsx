@@ -12,8 +12,10 @@ import {
   getLandOwner,
   claimResources,
   getLandData,
+  assetTransfer,
 } from './Functions/api';
 import {
+  formatName,
   formatAddColors,
 } from './Functions/handle';
 
@@ -84,6 +86,7 @@ const App = () => {
 
   const [popup, setPopup] = useState({ current: null, item: null });
   const [value, setValue] = useState(0);
+  const [transferId, setTransferId] = useState(0);
   const [isSync, setIsSync] = useState(false);
   const [myLands, setMyLands] = useState([]);
   const [lands, setLands] = useState([{
@@ -265,14 +268,20 @@ const App = () => {
       onGetLands();
       const hash = e.inMessage.hash;
       onPopup('success', hash);
-      document.location.pathname = '/'
     });
 	};
 
   const onClaim = (landAddress) => {
     onPopup('loading');
 		claimResources(landAddress, address).then((e) => {
-      console.log(e);
+      const hash = e.inMessage.hash;
+      onPopup('success', hash);
+    });
+	};
+
+  const onTransfer = (item) => {
+    onPopup('loading');
+		assetTransfer(myLands[0].address, address, item.label, value, lands[transferId].id).then((e) => {
       const hash = e.inMessage.hash;
       onPopup('success', hash);
     });
@@ -315,6 +324,47 @@ const App = () => {
                 style={popup.current === 'buy' ? { background: '#5D755C' } : { background: '#B51515' }}
               >{popup.current === 'buy' ? 'Buy' : 'Sell'}</div>
             </div>
+          </div>
+        </div>
+      )}
+      {popup.current === 'transfer' && (
+        <div className="popup">
+          <div
+            className="popup_close_panel"
+            onClick={() => onPopup()}
+          />
+          <div className="popup_content">
+            <div className={`stat_popup_block ${popup.item.className}`} />
+            <div className="popup_title">{`Transfer ${formatName(popup.item.label)}`}</div>
+            <input
+              type="text"
+              value={value}
+              onChange={(changeEvent) => setValue(changeEvent.target.value)}
+              disabled
+            />
+            <RangeSlider
+              value={value}
+              variant="success"
+              max={popup.item.count}
+              onChange={(changeEvent) => setValue(changeEvent.target.value)}
+            />
+            <div className={`select_block ${lands[transferId].className}`}>
+              <select 
+                className="select"
+                onChange={(changeEvent) => setTransferId(changeEvent.target.value)}
+              >
+                {lands.map((land, index) => (land.owner && land.id !== myLands[0].id && (
+                  <option value={land.id} key={land.id} defaultValue={index === 0}>
+                    {land.address}
+                  </option>
+                )))}
+              </select>
+            </div>
+            <div
+              className="btn"
+              style={{ background: '#5d745c', marginTop: 20 }}
+              onClick={() => onTransfer(popup.item)}
+            >Accept</div>
           </div>
         </div>
       )}
@@ -403,22 +453,6 @@ const App = () => {
                 >Mint</div>
               </>
             )}
-          </div>
-        </div>
-      )}
-      {popup.current === 'my' && (
-        <div className="popup">
-          <div
-            className="popup_close_panel"
-            onClick={() => onPopup()}
-          />
-          <div className="popup_content">
-            <div className="popup_title">My unit</div>
-            <div
-              className="btn"
-              style={{ background: '#45EBAF', marginTop: 20 }}
-              onClick={onPopup}
-            >Good</div>
           </div>
         </div>
       )}

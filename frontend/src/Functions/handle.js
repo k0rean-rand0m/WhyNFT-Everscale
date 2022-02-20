@@ -29,7 +29,7 @@ export function formatAddColors(data) {
             }];
         } else if (data.producers[i].mining_machines) {
             data.technique = [{
-                label: 'mining machines',
+                label: 'war_machines',
                 count: data.producers[i].mining_machines,
                 className: 'stat_block_item_title_brown2'
             }];
@@ -80,5 +80,6 @@ export function formatAddColors(data) {
     return data;
 }
 export function formatName(name) {
-    return name[0].toUpperCase() + name.slice(1);
+    const text = name[0].toUpperCase() + name.slice(1);
+    return text.replaceAll('_', ' ');
 }

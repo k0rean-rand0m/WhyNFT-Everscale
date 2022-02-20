@@ -25,19 +25,24 @@ const Home = ({ onPopup, myLands, address, onConnect }) => {
               {myLands[0].population.map((item) => (
                 <div className="stat_block_item" key={item.name}>
                   <div className={`stat_block_item_title ${item.className}`}>
-                    <span>{item.label}</span>
+                    <span>{formatName(item.label)}</span>
                     <span>{item.count}</span>
                   </div>
                   <div
                     className="btn"
-                    style={{ marginRight: 0, background: '#5D755C' }}
-                    onClick={() => onPopup('buy', item)}
+                    style={{ marginRight: 0, background: '#3f4043', cursor: 'not-allowed' }}
+                    // onClick={() => onPopup('buy', item)}
                   >Buy</div>
                   <div
                     className="btn"
-                    style={{ background: '#722A2A' }}
-                    onClick={() => onPopup('sell', item)}
+                    style={{ marginRight: 0, background: '#3f4043', cursor: 'not-allowed' }}
+                    // onClick={() => onPopup('sell', item)}
                   >Sell</div>
+                  <div
+                    className="btn"
+                    style={{ background: '#5d745c' }}
+                    onClick={() => onPopup('transfer', item)}
+                  >Transfer</div>
                 </div>
               ))}
             </div>
@@ -48,7 +53,6 @@ const Home = ({ onPopup, myLands, address, onConnect }) => {
               <span>{`+ ${myLands[0].fossils.reduce((total, value) => total + Number(value.production), 0)} per sec`}</span>
             </div>
             <div className="stat_block_content">
-              {console.log(myLands)}
               {myLands[0].fossils.map((item) => (
                 <div className="stat_block_item" key={item.name}>
                   <div className={`stat_block_item_title ${item.className}`}>
@@ -57,14 +61,19 @@ const Home = ({ onPopup, myLands, address, onConnect }) => {
                   </div>
                   <div
                     className="btn"
-                    style={{ marginRight: 0, background: '#5D755C' }}
-                    onClick={() => onPopup('buy', item)}
+                    style={{ marginRight: 0, background: '#3f4043', cursor: 'not-allowed' }}
+                    // onClick={() => onPopup('buy', item)}
                   >Buy</div>
                   <div
                     className="btn"
-                    style={{ background: '#722A2A' }}
-                    onClick={() => onPopup('sell', item)}
+                    style={{ marginRight: 0, background: '#3f4043', cursor: 'not-allowed' }}
+                    // onClick={() => onPopup('sell', item)}
                   >Sell</div>
+                  <div
+                    className="btn"
+                    style={{ background: '#5d745c' }}
+                    onClick={() => onPopup('transfer', item)}
+                  >Transfer</div>
                 </div>
               ))}
             </div>
@@ -78,19 +87,24 @@ const Home = ({ onPopup, myLands, address, onConnect }) => {
               {myLands[0].plants.map((item) => (
                 <div className="stat_block_item" key={item.name}>
                   <div className={`stat_block_item_title ${item.className}`}>
-                    <span>{item.label}</span>
+                    <span>{formatName(item.label)}</span>
                     <span>{item.count}</span>
                   </div>
                   <div
                     className="btn"
-                    style={{ marginRight: 0, background: '#5D755C' }}
-                    onClick={() => onPopup('buy', item)}
+                    style={{ marginRight: 0, background: '#3f4043', cursor: 'not-allowed' }}
+                    // onClick={() => onPopup('buy', item)}
                   >Buy</div>
                   <div
                     className="btn"
-                    style={{ background: '#722A2A' }}
-                    onClick={() => onPopup('sell', item)}
+                    style={{ marginRight: 0, background: '#3f4043', cursor: 'not-allowed' }}
+                    // onClick={() => onPopup('sell', item)}
                   >Sell</div>
+                  <div
+                    className="btn"
+                    style={{ background: '#5d745c' }}
+                    onClick={() => onPopup('transfer', item)}
+                  >Transfer</div>
                 </div>
               ))}
             </div>
@@ -104,19 +118,24 @@ const Home = ({ onPopup, myLands, address, onConnect }) => {
               {myLands[0].technique.map((item) => (
                 <div className="stat_block_item" key={item.name}>
                   <div className={`stat_block_item_title ${item.className}`}>
-                    <span>{item.label}</span>
+                    <span>{formatName(item.label)}</span>
                     <span>{item.count}</span>
                   </div>
                   <div
                     className="btn"
-                    style={{ marginRight: 0, background: '#5D755C' }}
-                    onClick={() => onPopup('buy', item)}
+                    style={{ marginRight: 0, background: '#3f4043', cursor: 'not-allowed' }}
+                    // onClick={() => onPopup('buy', item)}
                   >Buy</div>
                   <div
                     className="btn"
-                    style={{ background: '#722A2A' }}
-                    onClick={() => onPopup('sell', item)}
+                    style={{ marginRight: 0, background: '#3f4043', cursor: 'not-allowed' }}
+                    // onClick={() => onPopup('sell', item)}
                   >Sell</div>
+                  <div
+                    className="btn"
+                    style={{ background: '#5d745c' }}
+                    onClick={() => onPopup('transfer', item)}
+                  >Transfer</div>
                 </div>
               ))}
             </div>
@@ -128,14 +147,14 @@ const Home = ({ onPopup, myLands, address, onConnect }) => {
             {!address ? (
               <>
                 <div className="stat_block_icon">
-                  <FontAwesomeIcon icon={['fas', 'link']} />
+                  <img src="./img/hero.png" alt="" style={{ width: 300, marginBottom: 40 }}/>
                 </div>
                 <div className="stat_block_empty">To get started, connect your wallet</div>
                 <div
                   className="btn"
                   style={{ background: '#168C4D', display: 'block', marginTop: 20 }}
                   onClick={onConnect}
-                >Connect Ever wallet</div>
+                >Connect Ever wallet <FontAwesomeIcon icon={['fas', 'link']} /></div>
               </>
             ) : (
               <>
