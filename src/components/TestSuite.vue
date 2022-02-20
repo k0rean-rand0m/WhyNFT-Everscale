@@ -50,8 +50,8 @@ import {
   // TvmException
 } from 'everscale-inpage-provider';
 
-const mapABI = require("../../../../onchain/contracts/Map.abi.json")
-const landABI = require("../../../../onchain/contracts/Land.abi.json")
+const mapABI = require("../../ABI/Map.abi.json")
+const landABI = require("../../ABI/Land.abi.json")
 
 export default {
   name: 'TestSuite',
