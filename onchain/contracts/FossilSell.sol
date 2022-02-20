@@ -3,8 +3,7 @@ pragma AbiHeader expire;
 
 import './Land.sol';
 
-contract Map {
-
+contract FossilSell {
     string landBaseUri = "http://localhost:8081/";
     TvmCell _code_land;
     uint128 constant value = 0.1 ton;
@@ -15,13 +14,6 @@ contract Map {
         tvm.accept();
         _code_land = code_land;
     }
-
-    // Защита от похищения адреса
-    // Получение id блока
-    // Генерация рандомного значения
-    // everdev s g Map2 - creates signer
-    // everdev contract topup ./Map.abi.json -v 1000000000 -s Map - topup account
-    // everdev contract deploy ./Map.abi.json -s Map - deploy account
 
     function landAddress(uint land_id) public view returns (address) {
         TvmCell stateInit = tvm.buildStateInit({
