@@ -1,5 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import React, { useEffect, useRef } from 'react';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import mapboxgl from '!mapbox-gl'; // eslint-disable-line import/no-webpack-loader-syntax
 
@@ -7,18 +6,13 @@ mapboxgl.accessToken = 'pk.eyJ1IjoibWlrZS1wZXRyb3YiLCJhIjoiY2t6dWZjM2I5NHVpMTJ2b
 
 const Map = ({ onPopup }) => {
   const mapContainer = useRef(null);
-  const [lng, setLng] = useState(31);
-  const [lat, setLat] = useState(23);
-  const [zoom, setZoom] = useState(9);
-  // 9.3707 25.7995 4.3783
 
   useEffect(() => {
-    // if (map.current) return; // initialize map only once
     const map = new mapboxgl.Map({
       container: mapContainer.current,
       style: 'mapbox://styles/mike-petrov/ckzufxdbc00tp14l8lri1wm3o',
-      center: [lng, lat],
-      zoom: zoom,
+      center: [31, 23],
+      zoom: 9,
       maxBounds:[[30,22], [32,24]],
     });
     map.addControl(new mapboxgl.NavigationControl(), 'bottom-right')
@@ -136,7 +130,7 @@ const Map = ({ onPopup }) => {
     });
 
     return () => map.remove();
-  }, []);
+  }, [onPopup]);
 
   return (
     <div className="container container_map">
