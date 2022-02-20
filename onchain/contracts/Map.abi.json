@@ -38,6 +38,7 @@
 		{"name":"_pubkey","type":"uint256"},
 		{"name":"_timestamp","type":"uint64"},
 		{"name":"_constructorFlag","type":"bool"},
+		{"name":"landBaseUri","type":"string"},
 		{"name":"_code_land","type":"cell"}
 	]
 }

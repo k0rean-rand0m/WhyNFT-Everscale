@@ -4,18 +4,29 @@
         src="https://everkit.org/everscale-branding-v1.0.0/logo/svg/everscale_logo_secondary.svg"
         style="height: 50px; display: inline;"
     />
-    <div style="text-align: center; width: 100%">Connected: {{address}}</div>
+    <div style="text-align: center; width: 100%">Connected: {{address}} |
+      <a href="#" @click="switchAccount">Swith</a></div>
     <div style="text-align: center; width: 100%">Map on: {{mapAddress}}</div>
     <div style="text-align: center; width: 100%">Land on: {{landAddress}}</div>
     <div style="text-align: center; width: 100%">Land owner: {{landOwner}}</div>
-    <div style="text-align: center; width: 100%">Metadata: {{landMeta}}</div>
+    <div style="text-align: center; width: 100%">Land last claim: {{landLastClaim}}</div>
+    <div style="text-align: center; width: 100%"
+         v-for="fossil of landFossils"
+         v-bind:key="fossil.key">
+      {{fossil}}
+    </div>
+    <div style="text-align: center; width: 100%"
+         v-for="producer of Object.keys(landProducers)"
+         v-bind:key="producer">
+      {{landProducers[producer]}}
+    </div>
     <div>
       <br>
       <input placeholder="land id" v-model="landId"><br><br>
       <button @click="mintLand">Mint</button>
       <button @click="getLandAddress">Get Address</button>
-      <button @click="getLandOwner">Get Owner</button>
-      <button @click="getLandMeta">Get Meta</button>
+      <button @click="getLandData">Get Data</button>
+      <button @click="claim">Claim</button>
     </div>
   </div>
 </template>
@@ -40,13 +51,16 @@ export default {
       ever: null,
       address: null,
 
-      mapAddress: "0:ea0e6ea28ed3c44d1f5d824f9aefe1afec3a0ed7357a686dd892af5d13f46dcd",
+      mapAddress: "0:0c043085060712d5f84e3a3dd380d306e8077810a762a60cffbffcc4ea795642",
       map: null,
 
+      land: null,
       landId: null,
       landAddress: "",
       landOwner: "",
-      landMeta: ""
+      landLastClaim: null,
+      landFossils: [],
+      landProducers: []
     }
   },
 
@@ -76,6 +90,17 @@ export default {
       this.map = new this.ever.Contract(mapABI, this.mapAddress);
     },
 
+    async switchAccount() {
+      await this.ever.changeAccount();
+      const { accountInteraction } = await this.ever.requestPermissions({
+        permissions: ['basic', 'accountInteraction'],
+      })
+      if (accountInteraction == null) {
+        throw new Error('Insufficient permissions');
+      }
+      this.address = accountInteraction.address;
+    },
+
     async mintLand() {
       let landId = parseInt(this.landId)
       const transaction = await this.map.methods.mintLand({
@@ -100,27 +125,25 @@ export default {
       }
     },
 
-    async getLandMeta() {
-      let landId = parseInt(this.landId)
-      try {
-        const output = await this.map.methods['metadata']({
-          land_id: landId
-        }).call();
-        this.landMeta = output;
-      } catch (e) {
-        console.error(e);
-      }
+    async claim() {
+      const transaction = await this.land.methods.claim({}).send({
+        from: this.address,
+        amount: '1000000000',
+        bounce: true,
+      });
+      console.log(transaction);
     },
 
-    async getLandOwner() {
-      const land = new this.ever.Contract(landABI, this.landAddress);
+    async getLandData() {
+      this.land = new this.ever.Contract(landABI, this.landAddress);
+
       try {
-        const output = await land.methods.owner({}).call();
-        let landOwner = output["owner"]["_address"]
+        const owner = await this.land.methods.owner({}).call();
+        let landOwner = owner["owner"]["_address"]
         if (landOwner === this.address.toString()) {
           this.landOwner = "You!";
         } else {
-          this.landOwner = output["owner"]["_address"];
+          this.landOwner = owner["owner"]["_address"];
         }
       } catch (e) {
         if (e.code === 2) {
@@ -129,7 +152,23 @@ export default {
           this.landOwner = "Unexpected error. Check console."
           console.error(e);
         }
+        return
       }
+
+      this.landLastClaim = (await this.land.methods.last_claim({}).call())['last_claim'];
+      const fossils = []
+      for (let i of ["uranus", "metal", "hydrogen", "oxygen"]) {
+        fossils.push((await this.land.methods.get_fossil({label: i}).call()).value0)
+      }
+      const producers = []
+      for (let i of ["citizens", "plants", "mining_machines"]) {
+        producers.push({
+          [i]: (await this.land.methods[i]({}).call())[i]
+        });
+      }
+
+      this.landProducers = producers;
+      this.landFossils = fossils;
     }
   }
 }

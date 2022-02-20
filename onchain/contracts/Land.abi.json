@@ -6,17 +6,26 @@
 		{
 			"name": "constructor",
 			"inputs": [
-				{"name":"owner_","type":"address"}
+				{"name":"land_owner","type":"address"},
+				{"name":"meta_base_uri","type":"string"}
 			],
 			"outputs": [
 			]
 		},
 		{
-			"name": "metadata",
+			"name": "get_fossil",
+			"inputs": [
+				{"name":"label","type":"string"}
+			],
+			"outputs": [
+				{"components":[{"name":"label","type":"string"},{"name":"production","type":"uint256"},{"name":"unclaimed_capacity","type":"uint256"},{"name":"tank","type":"uint256"}],"name":"value0","type":"tuple"}
+			]
+		},
+		{
+			"name": "claim",
 			"inputs": [
 			],
 			"outputs": [
-				{"name":"value0","type":"string"}
 			]
 		},
 		{
@@ -36,11 +45,75 @@
 			]
 		},
 		{
-			"name": "base_url",
+			"name": "base_uri",
 			"inputs": [
 			],
 			"outputs": [
-				{"name":"base_url","type":"string"}
+				{"name":"base_uri","type":"string"}
+			]
+		},
+		{
+			"name": "last_claim",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"last_claim","type":"uint64"}
+			]
+		},
+		{
+			"name": "citizens",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"citizens","type":"uint64"}
+			]
+		},
+		{
+			"name": "plants",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"plants","type":"uint64"}
+			]
+		},
+		{
+			"name": "mining_machines",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"mining_machines","type":"uint64"}
+			]
+		},
+		{
+			"name": "uranus",
+			"inputs": [
+			],
+			"outputs": [
+				{"components":[{"name":"label","type":"string"},{"name":"production","type":"uint256"},{"name":"unclaimed_capacity","type":"uint256"},{"name":"tank","type":"uint256"}],"name":"uranus","type":"tuple"}
+			]
+		},
+		{
+			"name": "metal",
+			"inputs": [
+			],
+			"outputs": [
+				{"components":[{"name":"label","type":"string"},{"name":"production","type":"uint256"},{"name":"unclaimed_capacity","type":"uint256"},{"name":"tank","type":"uint256"}],"name":"metal","type":"tuple"}
+			]
+		},
+		{
+			"name": "hydrogen",
+			"inputs": [
+			],
+			"outputs": [
+				{"components":[{"name":"label","type":"string"},{"name":"production","type":"uint256"},{"name":"unclaimed_capacity","type":"uint256"},{"name":"tank","type":"uint256"}],"name":"hydrogen","type":"tuple"}
+			]
+		},
+		{
+			"name": "oxygen",
+			"inputs": [
+			],
+			"outputs": [
+				{"components":[{"name":"label","type":"string"},{"name":"production","type":"uint256"},{"name":"unclaimed_capacity","type":"uint256"},{"name":"tank","type":"uint256"}],"name":"oxygen","type":"tuple"}
 			]
 		}
 	],
@@ -55,6 +128,14 @@
 		{"name":"_constructorFlag","type":"bool"},
 		{"name":"owner","type":"address"},
 		{"name":"id","type":"uint256"},
-		{"name":"base_url","type":"string"}
+		{"name":"base_uri","type":"string"},
+		{"name":"last_claim","type":"uint64"},
+		{"name":"citizens","type":"uint64"},
+		{"name":"plants","type":"uint64"},
+		{"name":"mining_machines","type":"uint64"},
+		{"components":[{"name":"label","type":"string"},{"name":"production","type":"uint256"},{"name":"unclaimed_capacity","type":"uint256"},{"name":"tank","type":"uint256"}],"name":"uranus","type":"tuple"},
+		{"components":[{"name":"label","type":"string"},{"name":"production","type":"uint256"},{"name":"unclaimed_capacity","type":"uint256"},{"name":"tank","type":"uint256"}],"name":"metal","type":"tuple"},
+		{"components":[{"name":"label","type":"string"},{"name":"production","type":"uint256"},{"name":"unclaimed_capacity","type":"uint256"},{"name":"tank","type":"uint256"}],"name":"hydrogen","type":"tuple"},
+		{"components":[{"name":"label","type":"string"},{"name":"production","type":"uint256"},{"name":"unclaimed_capacity","type":"uint256"},{"name":"tank","type":"uint256"}],"name":"oxygen","type":"tuple"}
 	]
 }
