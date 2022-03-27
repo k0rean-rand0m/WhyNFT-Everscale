@@ -8,11 +8,10 @@ interface ILand{
 }
 
 contract Land {
+    uint static _salt;
+
     address public owner;
     uint static public id;
-    string public base_uri;
-
-    address constant creator = address.makeAddrStd(0, 0xd0ecae547ec075c0f2faa4749d50d3871e1315fd554ed63c9acfda6ec3a05069);
 
     uint64 public last_claim;
     structs.War war;
@@ -40,7 +39,7 @@ contract Land {
         _;
     }
 
-    modifier lets_do_it_like_they_do_it_on_discovery_channel {
+    modifier reproduction {
         uint rand = rnd.next(5);
         if (rand == 0) {
             citizens += 1;
@@ -61,51 +60,50 @@ contract Land {
             uint64 time_delta = block.timestamp - war.last_tick;
             if (time_delta >= 3600000000) {
                 citizens -= time_delta / 3600000000;
-                ILand opponent;
-                if (war.initiator) {
-                    opponent = ILand(addressById(war.defender));
-                } else {
-                    opponent = ILand(addressById(war.attacker));
-                }
                 war.last_tick = block.timestamp;
-                opponent.processWarExternal();
-                if (citizens <= 0) {  // If both lands have 0 citizens, ownership swaps
-                    citizens == 0;
-                    address opponent_owner = opponent.get_owner();
-                    transferTo(opponent_owner);
-                }
             }
         }
         _;
     }
 
-    constructor(address land_owner, string meta_base_uri) public {
+    constructor(address land_owner) public {
         tvm.accept();
         tvm.rawReserve(1 ton, 0);
         owner = land_owner;
-        base_uri = meta_base_uri;
         last_claim = block.timestamp;
-        war = structs.War(false, false, 0, 0, 0);
+        war = structs.War(false, 0, 0, address(0));
 
         uint base_unclaimed_capacity = 43200000000;
 
         uranus = structs.Fossil("uranus", rnd.next(4)+1, base_unclaimed_capacity, 0);
         metal = structs.Fossil("metal", rnd.next(4)+1, base_unclaimed_capacity, 0);
         hydrogen = structs.Fossil("hydrogen", rnd.next(4)+1, base_unclaimed_capacity, 0);
-        oxygen = structs.Fossil("oxygen", rnd.next(4)+1, base_unclaimed_capacity, 86400000000);
-        citizens = rnd.next(10);
-        plants = rnd.next(5);
+        oxygen = structs.Fossil("oxygen", 1, base_unclaimed_capacity, 86400000000);
+        citizens = rnd.next(9)+1;
+        plants = rnd.next(10);
         mining_machines = rnd.next(3);
         nymphaea = rnd.next(3);
-        creator.transfer(msg.value, false, 128);
     }
 
-    // Utils
-    function addressById(uint land_id) private returns (address) {
+    function forceIteration(uint land_id) public oxygen_consumption accidents reproduction process_war {
+        if (land_id != 0) {
+            Land dest = Land(addressById(land_id));
+            dest.forceIteration{
+                flag: 128
+            }(0);
+        }
+    }
+
+    //// Utils ////
+    function time() public pure returns (uint) {
+        return block.timestamp;
+    }
+
+    function addressById(uint land_id) private view returns (address) {
         TvmCell state = tvm.buildStateInit({
             code: tvm.code(),
             contr: Land,
-            varInit: { id: land_id },
+            varInit: { id: land_id, _salt: _salt },
             pubkey: 0
         });
         uint hashState = tvm.hash(state);
@@ -120,6 +118,54 @@ contract Land {
         return owner;
     }
 
+    //// War ////
+    function initWar(uint land_id) public oxygen_consumption accidents reproduction {
+        require(msg.sender == owner);
+        require(!war.in_war);
+
+        Land opponent_system = Land(addressById(land_id));
+        opponent_system.acceptWar{
+            flag: 128
+        }(id, owner);
+    }
+
+    function acceptWar(uint opponent_id, address opponent_owner) external oxygen_consumption accidents reproduction {
+        require(msg.sender == addressById(opponent_id));
+        require(!war.in_war);
+
+        war = structs.War(true, block.timestamp, opponent_id, opponent_owner);
+        Land opponent_system = Land(msg.sender);
+        opponent_system.acceptWarCallback{
+            flag: 128
+        }(id, owner);
+    }
+
+    function acceptWarCallback(uint opponent_id, address opponent_owner) external {
+        war = structs.War(true, block.timestamp, opponent_id, opponent_owner);
+    }
+
+    function conquer() public oxygen_consumption accidents reproduction {
+        require(msg.sender == war.opponent_owner);
+        require(citizens <= 0);
+
+        war.in_war = false;
+        owner = msg.sender;
+        Land opponent_system = Land(addressById(war.opponent_id));
+        opponent_system.endWar{
+            flag: 128
+        }();
+    }
+
+    function endWar() external {
+        require(war.in_war);
+        require(msg.sender == addressById(war.opponent_id));
+        war = structs.War(false, 0, 0, address(0));
+    }
+
+    function getWar() public view returns (structs.War) {
+        return war;
+    }
+
     //// Fossils ////
     function get_fossil(string label) public view returns (structs.Fossil) {
         if (label == "uranus") return uranus;
@@ -128,7 +174,7 @@ contract Land {
         if (label == "oxygen") return oxygen;
     }
 
-    function claim() public oxygen_consumption accidents lets_do_it_like_they_do_it_on_discovery_channel process_war {
+    function claim() public oxygen_consumption accidents reproduction process_war {
         tvm.rawReserve(1 ton, 0);
         uint64 time_delta = block.timestamp - last_claim;
         uint to_claim = 0;
@@ -165,62 +211,10 @@ contract Land {
         last_claim = block.timestamp;
     }
 
-    //// War ////
-    function get_war() public view returns (bool) {
-        return war.in_war;
-    }
-
-    function processWarExternal() external {
-        if (war.in_war == true) {
-            address opponent;
-            if (war.initiator) {
-                opponent = addressById(war.defender);
-            } else {
-                opponent = addressById(war.attacker);
-            }
-            require(msg.sender == opponent);
-
-            uint64 time_delta = block.timestamp - war.last_tick;
-            citizens -= time_delta / 3600000000;
-            war.last_tick = block.timestamp;
-            if (citizens <= 0) {
-                citizens == 0;
-                Land opponentLand = Land(opponent);
-                war.in_war = false;
-                address opponent_owner = opponentLand.get_owner();
-                transferTo(opponent_owner);
-            }
-        }
-    }
-
-    function initWar(uint against_id) public oxygen_consumption
-        accidents lets_do_it_like_they_do_it_on_discovery_channel {
-        tvm.rawReserve(1 ton, 0);
-
-        require(msg.sender == owner);
-        require(war.in_war == false);
-
-        Land defender = Land(addressById(against_id));
-        bool defenderInWar = defender.get_war();
-        require(defenderInWar == false, 13);
-
-        war = structs.War(true, true, id, against_id, block.timestamp);
-        defender.pushToWar(id);
-    }
-
-    function pushToWar(uint against_id) public oxygen_consumption
-        accidents lets_do_it_like_they_do_it_on_discovery_channel {
-
-        address expected_sender = addressById(against_id);
-        require(msg.sender == expected_sender, 123);
-        tvm.rawReserve(1 ton, 0);
-        war = structs.War(true, false, against_id, id, block.timestamp);
-    }
-
-    //// Asset Transferring ////
+    //// Asset Transferring aka Trading ////
     function assetTransfer(string label, uint amount, uint receiver_id)
         public oxygen_consumption
-        accidents lets_do_it_like_they_do_it_on_discovery_channel process_war {
+        accidents reproduction process_war {
 
         tvm.rawReserve(1 ton, 0);
         require(msg.sender == owner);
@@ -228,7 +222,7 @@ contract Land {
         TvmCell state = tvm.buildStateInit({
             code: tvm.code(),
             contr: Land,
-            varInit: { id: receiver_id },
+            varInit: { id: receiver_id, _salt: _salt },
             pubkey: 0
         });
         uint hashState = tvm.hash(state);
@@ -287,7 +281,7 @@ contract Land {
         TvmCell state = tvm.buildStateInit({
             code: tvm.code(),
             contr: Land,
-            varInit: { id: sender_id },
+            varInit: { id: sender_id, _salt: _salt },
             pubkey: 0
         });
         uint hashState = tvm.hash(state);

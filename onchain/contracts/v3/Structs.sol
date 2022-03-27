@@ -12,10 +12,8 @@ library structs {
 
     struct War {
         bool in_war;
-        bool initiator;
-        uint attacker;
-        uint defender;
         uint64 last_tick;
+        uint opponent_id;
         address opponent_owner;
     }
 
