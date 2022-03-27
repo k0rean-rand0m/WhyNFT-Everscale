@@ -1,0 +1,55 @@
+{
+	"ABI version": 2,
+	"version": "2.2",
+	"header": ["time", "expire"],
+	"functions": [
+		{
+			"name": "constructor",
+			"inputs": [
+				{"name":"code_land","type":"cell"},
+				{"name":"code_map","type":"cell"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "gameAddress",
+			"inputs": [
+				{"name":"game_id","type":"uint256"}
+			],
+			"outputs": [
+				{"name":"value0","type":"address"}
+			]
+		},
+		{
+			"name": "newGame",
+			"inputs": [
+				{"name":"game_id","type":"uint256"}
+			],
+			"outputs": [
+				{"name":"value0","type":"address"}
+			]
+		},
+		{
+			"name": "version",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"version","type":"uint256"}
+			]
+		}
+	],
+	"data": [
+	],
+	"events": [
+	],
+	"fields": [
+		{"name":"_pubkey","type":"uint256"},
+		{"name":"_timestamp","type":"uint64"},
+		{"name":"_constructorFlag","type":"bool"},
+		{"name":"_code_land","type":"cell"},
+		{"name":"_code_map","type":"cell"},
+		{"name":"_initial_salt","type":"uint256"},
+		{"name":"version","type":"uint256"}
+	]
+}

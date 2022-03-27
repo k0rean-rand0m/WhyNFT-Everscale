@@ -1,0 +1,244 @@
+{
+	"ABI version": 2,
+	"version": "2.2",
+	"header": ["time", "expire"],
+	"functions": [
+		{
+			"name": "constructor",
+			"inputs": [
+				{"name":"land_owner","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "forceIteration",
+			"inputs": [
+				{"name":"land_id","type":"uint256"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "time",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"value0","type":"uint256"}
+			]
+		},
+		{
+			"name": "get_owner",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"value0","type":"address"}
+			]
+		},
+		{
+			"name": "initWar",
+			"inputs": [
+				{"name":"land_id","type":"uint256"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "acceptWar",
+			"inputs": [
+				{"name":"opponent_id","type":"uint256"},
+				{"name":"opponent_owner","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "acceptWarCallback",
+			"inputs": [
+				{"name":"opponent_id","type":"uint256"},
+				{"name":"opponent_owner","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "conquer",
+			"inputs": [
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "endWar",
+			"inputs": [
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "getWar",
+			"inputs": [
+			],
+			"outputs": [
+				{"components":[{"name":"in_war","type":"bool"},{"name":"last_tick","type":"uint64"},{"name":"opponent_id","type":"uint256"},{"name":"opponent_owner","type":"address"}],"name":"value0","type":"tuple"}
+			]
+		},
+		{
+			"name": "get_fossil",
+			"inputs": [
+				{"name":"label","type":"string"}
+			],
+			"outputs": [
+				{"components":[{"name":"label","type":"string"},{"name":"production","type":"uint256"},{"name":"unclaimed_capacity","type":"uint256"},{"name":"tank","type":"uint256"}],"name":"value0","type":"tuple"}
+			]
+		},
+		{
+			"name": "claim",
+			"inputs": [
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "assetTransfer",
+			"inputs": [
+				{"name":"label","type":"string"},
+				{"name":"amount","type":"uint256"},
+				{"name":"receiver_id","type":"uint256"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "assetRecieve",
+			"inputs": [
+				{"name":"label","type":"string"},
+				{"name":"amount","type":"uint256"},
+				{"name":"sender_id","type":"uint256"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "owner",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"owner","type":"address"}
+			]
+		},
+		{
+			"name": "id",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"id","type":"uint256"}
+			]
+		},
+		{
+			"name": "last_claim",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"last_claim","type":"uint64"}
+			]
+		},
+		{
+			"name": "citizens",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"citizens","type":"uint256"}
+			]
+		},
+		{
+			"name": "plants",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"plants","type":"uint256"}
+			]
+		},
+		{
+			"name": "mining_machines",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"mining_machines","type":"uint256"}
+			]
+		},
+		{
+			"name": "war_machines",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"war_machines","type":"uint256"}
+			]
+		},
+		{
+			"name": "nymphaea",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"nymphaea","type":"uint256"}
+			]
+		},
+		{
+			"name": "uranus",
+			"inputs": [
+			],
+			"outputs": [
+				{"components":[{"name":"label","type":"string"},{"name":"production","type":"uint256"},{"name":"unclaimed_capacity","type":"uint256"},{"name":"tank","type":"uint256"}],"name":"uranus","type":"tuple"}
+			]
+		},
+		{
+			"name": "metal",
+			"inputs": [
+			],
+			"outputs": [
+				{"components":[{"name":"label","type":"string"},{"name":"production","type":"uint256"},{"name":"unclaimed_capacity","type":"uint256"},{"name":"tank","type":"uint256"}],"name":"metal","type":"tuple"}
+			]
+		},
+		{
+			"name": "hydrogen",
+			"inputs": [
+			],
+			"outputs": [
+				{"components":[{"name":"label","type":"string"},{"name":"production","type":"uint256"},{"name":"unclaimed_capacity","type":"uint256"},{"name":"tank","type":"uint256"}],"name":"hydrogen","type":"tuple"}
+			]
+		},
+		{
+			"name": "oxygen",
+			"inputs": [
+			],
+			"outputs": [
+				{"components":[{"name":"label","type":"string"},{"name":"production","type":"uint256"},{"name":"unclaimed_capacity","type":"uint256"},{"name":"tank","type":"uint256"}],"name":"oxygen","type":"tuple"}
+			]
+		}
+	],
+	"data": [
+		{"key":1,"name":"_salt","type":"uint256"},
+		{"key":2,"name":"id","type":"uint256"}
+	],
+	"events": [
+	],
+	"fields": [
+		{"name":"_pubkey","type":"uint256"},
+		{"name":"_timestamp","type":"uint64"},
+		{"name":"_constructorFlag","type":"bool"},
+		{"name":"_salt","type":"uint256"},
+		{"name":"owner","type":"address"},
+		{"name":"id","type":"uint256"},
+		{"name":"last_claim","type":"uint64"},
+		{"components":[{"name":"in_war","type":"bool"},{"name":"last_tick","type":"uint64"},{"name":"opponent_id","type":"uint256"},{"name":"opponent_owner","type":"address"}],"name":"war","type":"tuple"},
+		{"name":"citizens","type":"uint256"},
+		{"name":"plants","type":"uint256"},
+		{"name":"mining_machines","type":"uint256"},
+		{"name":"war_machines","type":"uint256"},
+		{"name":"nymphaea","type":"uint256"},
+		{"components":[{"name":"label","type":"string"},{"name":"production","type":"uint256"},{"name":"unclaimed_capacity","type":"uint256"},{"name":"tank","type":"uint256"}],"name":"uranus","type":"tuple"},
+		{"components":[{"name":"label","type":"string"},{"name":"production","type":"uint256"},{"name":"unclaimed_capacity","type":"uint256"},{"name":"tank","type":"uint256"}],"name":"metal","type":"tuple"},
+		{"components":[{"name":"label","type":"string"},{"name":"production","type":"uint256"},{"name":"unclaimed_capacity","type":"uint256"},{"name":"tank","type":"uint256"}],"name":"hydrogen","type":"tuple"},
+		{"components":[{"name":"label","type":"string"},{"name":"production","type":"uint256"},{"name":"unclaimed_capacity","type":"uint256"},{"name":"tank","type":"uint256"}],"name":"oxygen","type":"tuple"}
+	]
+}
