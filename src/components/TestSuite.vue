@@ -146,9 +146,9 @@
 <script>
 import {ProviderRpcClient,} from 'everscale-inpage-provider';
 
-const masterABI = require("../../../../onchain/contracts/v3/GameMaster.abi.json")
-const mapABI = require("../../../../onchain/contracts/v3/Map.abi.json")
-const landABI = require("../../../../onchain/contracts/v3/Land.abi.json")
+const masterABI = require("../../ABI/GameMaster.abi.json")
+const mapABI = require("../../ABI/Map.abi.json")
+const landABI = require("../../ABI/Land.abi.json")
 
 export default {
   name: 'TestSuite',

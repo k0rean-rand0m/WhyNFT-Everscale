@@ -6,49 +6,40 @@
 		{
 			"name": "constructor",
 			"inputs": [
-				{"name":"code_land","type":"cell"}
+				{"name":"code_land","type":"cell"},
+				{"name":"code_map","type":"cell"}
 			],
 			"outputs": [
 			]
 		},
 		{
-			"name": "landAddress",
+			"name": "gameAddress",
 			"inputs": [
-				{"name":"land_id","type":"uint256"}
+				{"name":"game_id","type":"uint256"}
 			],
 			"outputs": [
 				{"name":"value0","type":"address"}
 			]
 		},
 		{
-			"name": "mintLand",
+			"name": "newGame",
 			"inputs": [
-				{"name":"land_id","type":"uint256"}
+				{"name":"game_id","type":"uint256"}
 			],
 			"outputs": [
 				{"name":"value0","type":"address"}
 			]
 		},
 		{
-			"name": "id",
+			"name": "version",
 			"inputs": [
 			],
 			"outputs": [
-				{"name":"id","type":"uint256"}
-			]
-		},
-		{
-			"name": "land_limit",
-			"inputs": [
-			],
-			"outputs": [
-				{"name":"land_limit","type":"uint256"}
+				{"name":"version","type":"uint256"}
 			]
 		}
 	],
 	"data": [
-		{"key":1,"name":"id","type":"uint256"},
-		{"key":2,"name":"_salt","type":"uint256"}
 	],
 	"events": [
 	],
@@ -56,9 +47,9 @@
 		{"name":"_pubkey","type":"uint256"},
 		{"name":"_timestamp","type":"uint64"},
 		{"name":"_constructorFlag","type":"bool"},
-		{"name":"id","type":"uint256"},
-		{"name":"_salt","type":"uint256"},
 		{"name":"_code_land","type":"cell"},
-		{"name":"land_limit","type":"uint256"}
+		{"name":"_code_map","type":"cell"},
+		{"name":"_initial_salt","type":"uint256"},
+		{"name":"version","type":"uint256"}
 	]
 }
