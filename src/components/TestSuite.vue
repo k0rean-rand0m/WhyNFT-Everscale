@@ -8,6 +8,10 @@
     </div>
 <!--    <br>-->
 
+    <div id="logo">
+      <img src="./loader.gif">
+    </div>
+
     <!--  GAME MASTER  -->
     <div>
       <p><b>Enter the game ID to {{gameStarted === true ? 'switch' : 'join'}} the game</b></p>
