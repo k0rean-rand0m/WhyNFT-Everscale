@@ -8,10 +8,6 @@
     </div>
 <!--    <br>-->
 
-    <div id="logo">
-      <img src="../assets/loader.gif">
-    </div>
-
     <!--  GAME MASTER  -->
     <div>
       <p><b>Enter the game ID to {{gameStarted === true ? 'switch' : 'join'}} the game</b></p>
@@ -146,9 +142,9 @@
 <script>
 import {ProviderRpcClient,} from 'everscale-inpage-provider';
 
-const masterABI = require("../../ABI/GameMaster.abi.json")
-const mapABI = require("../../ABI/Map.abi.json")
-const landABI = require("../../ABI/Land.abi.json")
+const masterABI = require("./GameMaster.abi.json")
+const mapABI = require("./Map.abi.json")
+const landABI = require("./Land.abi.json")
 
 export default {
   name: 'TestSuite',
