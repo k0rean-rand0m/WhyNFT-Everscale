@@ -5,7 +5,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { formatName } from '../Functions/handle';
 
-const Home = ({ onPopup, myLands, address, onConnect }) => {
+const Home = ({ onPopup, myLands, address, onConnect, activeLandId }) => {
   return (
     <div className="container">
       <div className="shadow_left">
@@ -19,10 +19,10 @@ const Home = ({ onPopup, myLands, address, onConnect }) => {
           <div className="stat_block">
             <div className="title title_group">
               <span>Population</span>
-              <span>{`${myLands[0].population.length} entity`}</span>
+              <span>{`${myLands[activeLandId].population.length} entity`}</span>
             </div>
             <div className="stat_block_content">
-              {myLands[0].population.map((item) => (
+              {myLands[activeLandId].population.map((item) => (
                 <div className="stat_block_item" key={item.name}>
                   <div className={`stat_block_item_title ${item.className}`}>
                     <span>{formatName(item.label)}</span>
@@ -50,10 +50,10 @@ const Home = ({ onPopup, myLands, address, onConnect }) => {
           <div className="stat_block">
             <div className="title title_group">
               <span>Fossils</span>
-              <span>{`+ ${myLands[0].fossils.reduce((total, value) => total + Number(value.production), 0)} per sec`}</span>
+              <span>{`+ ${myLands[activeLandId].fossils.reduce((total, value) => total + Number(value.production), 0)} per sec`}</span>
             </div>
             <div className="stat_block_content">
-              {myLands[0].fossils.map((item) => (
+              {myLands[activeLandId].fossils.map((item) => (
                 <div className="stat_block_item" key={item.name}>
                   <div className={`stat_block_item_title ${item.className}`}>
                     <span>{formatName(item.label)}</span>
@@ -81,10 +81,10 @@ const Home = ({ onPopup, myLands, address, onConnect }) => {
           <div className="stat_block">
             <div className="title title_group">
               <span>Plants</span>
-              <span>{`${myLands[0].plants.length} entity`}</span>
+              <span>{`${myLands[activeLandId].plants.length} entity`}</span>
             </div>
             <div className="stat_block_content">
-              {myLands[0].plants.map((item) => (
+              {myLands[activeLandId].plants.map((item) => (
                 <div className="stat_block_item" key={item.name}>
                   <div className={`stat_block_item_title ${item.className}`}>
                     <span>{formatName(item.label)}</span>
@@ -112,10 +112,10 @@ const Home = ({ onPopup, myLands, address, onConnect }) => {
           <div className="stat_block">
             <div className="title title_group">
               <span>Technique</span>
-              <span>{`${myLands[0].technique.length} entity`}</span>
+              <span>{`${myLands[activeLandId].technique.length} entity`}</span>
             </div>
             <div className="stat_block_content">
-              {myLands[0].technique.map((item) => (
+              {myLands[activeLandId].technique.map((item) => (
                 <div className="stat_block_item" key={item.name}>
                   <div className={`stat_block_item_title ${item.className}`}>
                     <span>{formatName(item.label)}</span>

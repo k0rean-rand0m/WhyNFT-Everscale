@@ -86,6 +86,7 @@ const App = () => {
 
   const [popup, setPopup] = useState({ current: null, item: null });
   const [value, setValue] = useState(0);
+  const [activeLandId, setActiveLandId] = useState(0);
   const [transferId, setTransferId] = useState(0);
   const [isSync, setIsSync] = useState(false);
   const [myLands, setMyLands] = useState([]);
@@ -245,7 +246,7 @@ const App = () => {
           landsTemp[i].owner = landOwner;
           if (landOwner === myAddress) {
             getLandData(landAddress, myAddress).then((landData) => {
-              setMyLands([...myLands, {
+              setMyLands((myLandsPrev) => [...myLandsPrev, {
                 ...landsTemp[i],
                 ...formatAddColors(landData),
                 address: landAddress,
@@ -253,12 +254,12 @@ const App = () => {
               }]);
             });
           }
-          setTimeout(() => {
-            setIsSync(false);
-          }, 500);
         });
       });
     }
+    setTimeout(() => {
+      setIsSync(false);
+    }, 500);
     setLands(landsTemp);
 	};
 
@@ -272,6 +273,7 @@ const App = () => {
 	};
 
   const onClaim = (landAddress) => {
+    console.log(landAddress)
     onPopup('loading');
 		claimResources(landAddress, address).then((e) => {
       setTimeout(() => {
@@ -284,7 +286,7 @@ const App = () => {
 
   const onTransfer = (item) => {
     onPopup('loading');
-		assetTransfer(myLands[0].address, address, item.label, value, lands[transferId].id).then((e) => {
+		assetTransfer(myLands[activeLandId].address, address, item.label, value, lands[transferId].id).then((e) => {
       setTimeout(() => {
         onGetLands();
         const hash = e.inMessage.hash;
@@ -359,7 +361,7 @@ const App = () => {
                 className="select"
                 onChange={(changeEvent) => setTransferId(changeEvent.target.value)}
               >
-                {lands.map((land, index) => (land.owner && land.id !== myLands[0].id && (
+                {lands.map((land, index) => (land.owner && land.id !== myLands[activeLandId].id && (
                   <option value={land.id} key={land.id} defaultValue={index === 0}>
                     {land.address}
                   </option>
@@ -524,10 +526,20 @@ const App = () => {
         <div className={location.pathname === '/map' ? "header map" : "header"}>
           {myLands.length !== 0 && location.pathname === '/' && (
             <>
-              <div className={`select_block ${myLands[0].className}`}>
-                <select className="select">
-                  {myLands.map((land, index) => (
-                    <option value={land.id} key={land.id} defaultValue={index === 0}>
+              <div className={`select_block ${myLands[activeLandId].className}`}>
+                <select
+                  className="select"
+                  onChange={(changeEvent) => {
+                    for (let i = 0; i < myLands.length; i += 1) {
+                      if (Number(changeEvent.target.value) === myLands[i].id) {
+                        setActiveLandId(i);
+                      }
+                    }
+                  }}
+                  defaultValue={activeLandId}
+                >
+                  {myLands.map((land) => (
+                    <option value={land.id} key={land.id} >
                       {land.address}
                     </option>
                   ))}
@@ -537,7 +549,7 @@ const App = () => {
                 <div
                   className="btn"
                   style={{ background: '#5d745c' }}
-                  onClick={() => onClaim(myLands[0].address)}
+                  onClick={() => onClaim(myLands[activeLandId].address)}
                 >Claim</div>
               </div>
             </>
@@ -578,6 +590,7 @@ const App = () => {
               onPopup={onPopup}
               myLands={myLands}
               address={address}
+              activeLandId={activeLandId}
               onConnect={onConnect}
             />}
           />

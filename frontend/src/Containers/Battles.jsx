@@ -14,7 +14,7 @@ const Battles = ({ onPopup, myLands, lands }) => {
           <span>Battles</span>
         </div>
         <div className="stat_block_content">
-          {lands.map((item) => (item.address && myLands.some((land) => land.id !== item.id) && (
+          {lands.map((item) => (item.address && myLands.every((land) => land.id !== item.id) && (
             <div className="stat_block_item" key={item.address}>
               <div className={`stat_block_item_title ${item.className}`}>
                 <span>{item.address}</span>
